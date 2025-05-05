@@ -1,0 +1,77 @@
+<?php
+    include("classes/cls_company_year_master.php");
+    include("include/header.php");
+    include("include/theme_styles.php");
+    include("include/header_close.php");
+ $years = $_bll->getAllCompanyYears(); 
+$transactionmode="";
+    if(isset($_REQUEST["transactionmode"]))       
+    {    
+        $transactionmode=$_REQUEST["transactionmode"];
+    }
+    if( $transactionmode=="U")       
+    {    
+        $_bll->fillModel();
+        $label="Update";
+    } else {
+        $label="Add";
+    }
+?>
+<body class="hold-transition skin-blue layout-top-nav">
+<?php
+    include("include/body_open.php");
+?>
+<div class="wrapper">
+<?php
+    include("include/navigation.php");
+?>
+     <div class="content-wrapper">
+    <div class="container-fluid">
+      <section class="content-header">
+        <h1>
+          Switch Year
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="dashboard.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href=""><i class="fa fa-dashboard"></i> Switch Year</a></li>
+        </ol>
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+    <div class="col-md-12" style="padding:0;">
+       <div class="box box-info">
+            <!-- form start -->
+            <form id="masterForm" action=""  method="post" class="form-horizontal needs-validation" enctype="multipart/form-data" novalidate>
+            <div class="box-body">
+                <div class="form-group row gy-2">
+                    <label for="companyYear" class="col-sm-1 control-label">Select Company Year</label>
+                        <div class="col-sm-2">
+                            <select name="companyYear" id="companyYear" class="form-control" required>
+                                <option value="">-- Select Year --</option>
+                                <?php foreach(array_unique($years) as $year): ?>
+                                    <option value="<?= htmlspecialchars($year) ?>"><?= htmlspecialchars($year) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                </div>
+            </div>
+           </form>
+        </div>
+          </div>
+        </section>
+         </div>
+    </div>
+    </div>
+</body>
+<script>
+public function getAllCompanyYears() {
+    $query = "SELECT DISTINCT year_range FROM company_years ORDER BY year_range DESC";
+    $result = mysqli_query($this->connection, $query);
+    $years = [];
+    while($row = mysqli_fetch_assoc($result)) {
+        $years[] = $row['year_range'];
+    }
+    return $years;
+}
+</script>
